@@ -2695,4 +2695,8 @@
 
   <java-symbol type="drawable" name="ic_restart" />
 
+    <!-- Package Manager -->
+    <java-symbol type="array" name="config_disabledComponents" />
+    <java-symbol type="array" name="config_forceEnabledComponents" />
+
 </resources>
