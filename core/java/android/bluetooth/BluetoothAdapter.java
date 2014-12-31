@@ -1681,7 +1681,9 @@ public final class BluetoothAdapter {
     /*package*/ IBluetooth getBluetoothService(IBluetoothManagerCallback cb) {
         synchronized (mManagerCallback) {
             if (cb == null) {
-                Log.w(TAG, "getBluetoothService() called with no BluetoothManagerCallback");
+                if (VDBG) {
+                    Log.w(TAG, "getBluetoothService() called with no BluetoothManagerCallback");
+                }
             } else if (!mProxyServiceStateCallbacks.contains(cb)) {
                 mProxyServiceStateCallbacks.add(cb);
             }
