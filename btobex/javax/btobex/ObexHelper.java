@@ -50,7 +50,7 @@ import java.util.TimeZone;
  */
 public final class ObexHelper {
     private static final String TAG = "ObexHelper";
-    public static final boolean VERBOSE = true;
+    public static final boolean VERBOSE = false;
 
     /* Debugging hooks to control AMP-related operations */
     private static final String DEBUG_FORCE_SRM = "debug.obex.force_srm_capable";

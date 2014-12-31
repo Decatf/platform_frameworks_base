@@ -50,7 +50,8 @@ import java.io.ByteArrayOutputStream;
 public final class ClientOperation implements Operation, BaseStream {
     private static final String TAG = "Obex ClientOperation";
 
-    private static final boolean VERBOSE = ObexHelper.VERBOSE;
+    // private static final boolean VERBOSE = ObexHelper.VERBOSE;
+    private static final boolean VERBOSE = false;
 
     private ClientSession mParent;
 
