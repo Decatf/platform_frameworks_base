@@ -4889,4 +4889,11 @@
 
     <!-- Zen mode condition: no exit criteria. [CHAR LIMIT=NONE] -->
     <string name="zen_mode_forever">Indefinitely</string>
+
+    <!-- Default wi-fi hotspot ssid -->
+    <string name="def_wifi_wifihotspot_ssid" translatable="false"></string>
+    <!-- Default wi-fi hotspot pass -->
+    <string name="def_wifi_wifihotspot_pass" translatable="false"></string>
+    <!-- Default wi-fi direct name -->
+    <string name="def_wifi_direct_name" translatable="false"></string>
 </resources>
