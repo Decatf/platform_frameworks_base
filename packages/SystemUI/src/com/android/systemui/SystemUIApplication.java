@@ -127,6 +127,9 @@ public class SystemUIApplication extends Application {
                 mServices[i].onBootCompleted();
             }
         }
+        /* HACK: place a one pixel layer for Tegra 2 HWC 1.0 wrapper  */
+        startService(new Intent(this, PlaceHolderService.class));
+
         mServicesStarted = true;
     }
 
