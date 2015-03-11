@@ -2149,6 +2149,7 @@
   <java-symbol type="id" name="scrollIndicatorUp" />
   <java-symbol type="id" name="scrollIndicatorDown" />
   <java-symbol type="array" name="config_sms_convert_destination_number_support" />
+
   <java-symbol type="string" name="prohibit_manual_network_selection_in_gobal_mode" />
   <java-symbol type="id" name="profile_button" />
 
@@ -2168,5 +2169,11 @@
 
   <!-- Config.xml entries -->
   <java-symbol type="bool" name="config_show_cmIMESwitcher"/>
+
+  <!-- Developer settings - Kill app back press -->
+  <java-symbol type="string" name="app_killed_message" />
+
+  <!-- Config.xml entries -->
+  <java-symbol type="integer" name="config_backKillTimeout" />
 
 </resources>
