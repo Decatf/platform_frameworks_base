@@ -68,6 +68,8 @@ interface IConnectivityManager
 
     boolean requestRouteToHostAddress(int networkType, in byte[] hostAddress);
 
+    void setMobileDataEnabled(boolean enabled);
+
     int tether(String iface);
 
     int untether(String iface);
