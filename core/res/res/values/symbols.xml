@@ -2324,4 +2324,7 @@
 
   <java-symbol type="drawable" name="platlogo_m" />
 
+  <!-- Samsung STK -->
+  <java-symbol type="bool" name="config_samsung_stk" />
+
 </resources>
