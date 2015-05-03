@@ -104,6 +104,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.android.keyguard.KeyguardHostView.OnDismissAction;
+import android.content.ContentResolver;
 
 public abstract class BaseStatusBar extends SystemUI implements
         CommandQueue.Callbacks, ActivatableNotificationView.OnActivatedListener,
@@ -201,6 +202,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     private boolean mLockscreenPublicMode = false;
     private final SparseBooleanArray mUsersAllowingPrivateNotifications = new SparseBooleanArray();
     private NotificationColorUtil mNotificationColorUtil;
+    protected ContentResolver mResolver;
 
     private UserManager mUserManager;
 
@@ -494,6 +496,7 @@ public abstract class BaseStatusBar extends SystemUI implements
     }
 
     public void start() {
+        mResolver = mContext.getContentResolver();
         mWindowManager = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
         mWindowManagerService = WindowManagerGlobal.getWindowManagerService();
 

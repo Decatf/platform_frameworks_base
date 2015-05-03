@@ -82,6 +82,7 @@ import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.NotificationListenerService.RankingMap;
 import android.service.notification.StatusBarNotification;
@@ -189,6 +190,9 @@ import java.util.Map;
 
 public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         DragDownHelper.DragDownCallback, ActivityStarter, OnUnlockMethodChangedListener {
+
+    static final int LAYOUT_NAV_BAR_STOCK = com.android.systemui.R.layout.navigation_bar;
+    static final int LAYOUT_NAV_BAR_LEFT = com.android.systemui.R.layout.navigation_bar_left;
     static final String TAG = "PhoneStatusBar";
     public static final boolean DEBUG = BaseStatusBar.DEBUG;
     public static final boolean SPEW = false;
@@ -686,8 +690,12 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             boolean showNav = mWindowManagerService.hasNavigationBar();
             if (DEBUG) Log.v(TAG, "hasNavigationBar=" + showNav);
             if (showNav) {
-                mNavigationBarView =
-                    (NavigationBarView) View.inflate(context, R.layout.navigation_bar, null);
+                int navBarLayout = Settings.Secure.getInt(mResolver, Settings.Secure.UI_MODE, 0) == 1 ?
+                    LAYOUT_NAV_BAR_LEFT : LAYOUT_NAV_BAR_STOCK;
+                // int navBarLayout = LAYOUT_NAV_BAR_LEFT;
+
+                mNavigationBarView = (NavigationBarView) View.inflate(context, navBarLayout, null);
+
 
                 mNavigationBarView.setDisabledFlags(mDisabled);
                 mNavigationBarView.setBar(this);
