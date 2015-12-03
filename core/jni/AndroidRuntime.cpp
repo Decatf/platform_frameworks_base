@@ -622,6 +622,7 @@ int AndroidRuntime::startVm(JavaVM** pJavaVM, JNIEnv** pEnv, bool zygote)
     char methodTraceFileBuf[sizeof("-Xmethod-trace-file:") + PROPERTY_VALUE_MAX];
     char methodTraceFileSizeBuf[sizeof("-Xmethod-trace-file-size:") + PROPERTY_VALUE_MAX];
     char fingerprintBuf[sizeof("-Xfingerprint:") + PROPERTY_VALUE_MAX];
+    char compilerBackendBuf[sizeof("--compiler-backend=") + PROPERTY_VALUE_MAX];
 
     bool checkJni = false;
     property_get("dalvik.vm.checkjni", propBuf, "");
@@ -931,6 +932,16 @@ int AndroidRuntime::startVm(JavaVM** pJavaVM, JNIEnv** pEnv, bool zygote)
     // Dalvik-cache pruning counter.
     parseRuntimeOption("dalvik.vm.zygote.max-boot-retry", cachePruneBuf,
                        "-Xzygote-max-boot-retry=");
+
+    // Specify the compiler backend
+    property_get("config.dex2oat-compiler-backend", propBuf, "");
+    if (strcmp(propBuf, "Optimizing") == 0 || strcmp(propBuf, "Quick") == 0) {
+        snprintf(compilerBackendBuf, sizeof(compilerBackendBuf), "--compiler-backend=%s", propBuf);
+        addOption("-Xcompiler-option");
+        addOption(compilerBackendBuf);
+        addOption("-Ximage-compiler-option");
+        addOption(compilerBackendBuf);
+    }
 
     /*
      * When running with debug.generate-debug-info, add --generate-debug-info to
