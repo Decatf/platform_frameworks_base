@@ -105,16 +105,21 @@ void EglManager::initialize() {
     initExtensions();
 
     // Now that extensions are loaded, pick a swap behavior
-    if (Properties::enablePartialUpdates) {
-        // An Adreno driver bug is causing rendering problems for SkiaGL with
-        // buffer age swap behavior (b/31957043).  To temporarily workaround,
-        // we will use preserved swap behavior.
-        if (Properties::useBufferAge && EglExtensions.bufferAge && !Properties::isSkiaEnabled()) {
-            mSwapBehavior = SwapBehavior::BufferAge;
-        } else {
-            mSwapBehavior = SwapBehavior::Preserved;
-        }
-    }
+    // if (Properties::enablePartialUpdates) {
+    //     // An Adreno driver bug is causing rendering problems for SkiaGL with
+    //     // buffer age swap behavior (b/31957043).  To temporarily workaround,
+    //     // we will use preserved swap behavior.
+    //     if (Properties::useBufferAge && EglExtensions.bufferAge && !Properties::isSkiaEnabled()) {
+    //         mSwapBehavior = SwapBehavior::BufferAge;
+    //     } else {
+    //         mSwapBehavior = SwapBehavior::Preserved;
+    //     }
+    // }
+
+    ALOGD("Properties::enablePartialUpdates %d", static_cast<int>(Properties::enablePartialUpdates));
+    ALOGD("Properties::useBufferAge %d", static_cast<int>(Properties::useBufferAge));
+    ALOGD("Default swap behavior %d", static_cast<int>(mSwapBehavior));
+    mSwapBehavior = SwapBehavior::Discard;
 
     loadConfig();
     createContext();
