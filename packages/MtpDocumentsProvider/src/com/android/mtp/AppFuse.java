@@ -67,8 +67,12 @@ public class AppFuse {
     void mount(StorageManager storageManager) throws IOException {
         Preconditions.checkState(mDeviceFd == null);
         mDeviceFd = storageManager.mountAppFuse(mName);
-        mMessageThread = new AppFuseMessageThread(mDeviceFd.dup().detachFd());
-        mMessageThread.start();
+        if(mDeviceFd == null) {
+            Log.e(MtpDocumentsProvider.TAG, "mount() mDeviceFd == null");
+        } else {
+            mMessageThread = new AppFuseMessageThread(mDeviceFd.dup().detachFd());
+            mMessageThread.start();
+        }
     }
 
     @VisibleForTesting
