@@ -113,6 +113,8 @@ void EglManager::initialize() {
 
     initExtensions();
 
+    ALOGD("Default swap behavior %d", static_cast<int>(mSwapBehavior));
+
     // Now that extensions are loaded, pick a swap behavior
     if (Properties::enablePartialUpdates) {
         if (Properties::useBufferAge && EglExtensions.bufferAge) {
@@ -121,6 +123,11 @@ void EglManager::initialize() {
             mSwapBehavior = SwapBehavior::Preserved;
         }
     }
+
+    mSwapBehavior = SwapBehavior::Discard;
+    ALOGD("Properties::enablePartialUpdates %d", static_cast<int>(Properties::enablePartialUpdates));
+    ALOGD("Properties::useBufferAge %d", static_cast<int>(Properties::useBufferAge));
+    ALOGD("Actual swap behavior %d", static_cast<int>(mSwapBehavior));
 
     loadConfig();
     createContext();
