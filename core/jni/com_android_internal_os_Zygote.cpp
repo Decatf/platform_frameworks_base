@@ -26,6 +26,7 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <dlfcn.h>
 #include <sys/capability.h>
 #include <sys/personality.h>
 #include <sys/prctl.h>
@@ -39,6 +40,7 @@
 #include <cutils/fs.h>
 #include <cutils/multiuser.h>
 #include <cutils/sched_policy.h>
+#include <cutils/properties.h>
 #include <private/android_filesystem_config.h>
 #include <utils/String8.h>
 #include <selinux/android.h>
@@ -421,6 +423,52 @@ void ckTime(uint64_t start, const char* where) {
   }
 }
 
+#define JAUNT_LIB "/system/lib/libjaunt.so"
+
+static bool HasSystemGid(JNIEnv* env, jintArray javaGids) {
+
+  if (javaGids == NULL) {
+    return false;
+  }
+
+  ScopedIntArrayRO gids(env, javaGids);
+  const size_t gidCount = gids.size();
+
+  for (size_t i = 0; i < gidCount; i++) {
+    const jint gid = gids[i];
+
+    if (gid >= 1000 && gid < 2000) {
+      return true;
+    }
+  }
+  return false;
+}
+
+static bool EnableTcg(JNIEnv* env, jintArray javaGids) {
+  char propBuf[PROPERTY_VALUE_MAX];
+  property_get("tcg.mode", propBuf, "global");
+
+  if (strcmp(propBuf, "global") == 0) {
+    return true;
+  }
+
+  if (strcmp(propBuf, "system") == 0) {
+    return HasSystemGid(env, javaGids);
+  }
+
+  if (strcmp(propBuf, "disabled") == 0) {
+    return false;
+  }
+
+  return false;
+}
+
+static void PreloadTcg(void) {
+  if(access(JAUNT_LIB, F_OK) != -1) {
+      dlopen(JAUNT_LIB, RTLD_NOW | RTLD_LOCAL);
+  }
+}
+
 // Utility routine to fork zygote and specialize the child process.
 static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArray javaGids,
                                      jint debug_flags, jobjectArray javaRlimits,
@@ -495,6 +543,10 @@ static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArra
     SetGids(env, javaGids);
 
     SetRLimits(env, javaRlimits);
+
+    if (!is_system_server && EnableTcg(env, javaGids)) {
+      PreloadTcg();
+    }
 
     if (use_native_bridge) {
       ScopedUtfChars isa_string(env, instructionSet);
