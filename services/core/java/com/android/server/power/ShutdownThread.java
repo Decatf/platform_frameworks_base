@@ -26,6 +26,7 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.IBluetoothManager;
 import android.media.AudioAttributes;
+import android.net.wifi.WifiManager;
 import android.nfc.NfcAdapter;
 import android.nfc.INfcAdapter;
 import android.content.BroadcastReceiver;
@@ -117,6 +118,7 @@ public final class ShutdownThread extends Thread {
     private PowerManager mPowerManager;
     private PowerManager.WakeLock mCpuWakeLock;
     private PowerManager.WakeLock mScreenWakeLock;
+    private WifiManager mWifiManager;
     private Handler mHandler;
 
     private static AlertDialog sConfirmDialog;
@@ -424,6 +426,11 @@ public final class ShutdownThread extends Thread {
                 sInstance.mScreenWakeLock = null;
             }
         }
+
+        sInstance.mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE); 
+        sInstance.mWifiManager.disconnect();
+        sInstance.mWifiManager.stopWifiDriver();
+
 
         // start the thread that initiates shutdown
         sInstance.mHandler = new Handler() {
