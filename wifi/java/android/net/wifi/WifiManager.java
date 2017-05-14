@@ -1061,6 +1061,14 @@ public class WifiManager {
         }
     }
 
+    public void stopWifiDriver() {
+        try {
+            mService.stopWifiDriver();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
     /* Keep this list in sync with wifi_hal.h */
     /** @hide */
     public static final int WIFI_FEATURE_INFRA            = 0x0001;  // Basic infrastructure mode
