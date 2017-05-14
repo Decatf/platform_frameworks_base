@@ -89,6 +89,8 @@ interface IWifiManager
 
     void reassociate();
 
+    void stopWifiDriver();
+
     WifiInfo getConnectionInfo();
 
     boolean setWifiEnabled(String packageName, boolean enable);
