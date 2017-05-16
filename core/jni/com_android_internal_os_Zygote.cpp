@@ -460,35 +460,12 @@ static void SetForkLoad(bool boost) {
 
 #define JAUNT_LIB "/system/lib/libjaunt.so"
 
-static bool HasSystemGid(JNIEnv* env, jintArray javaGids) {
-
-  if (javaGids == NULL) {
-    return false;
-  }
-
-  ScopedIntArrayRO gids(env, javaGids);
-  const size_t gidCount = gids.size();
-
-  for (size_t i = 0; i < gidCount; i++) {
-    const jint gid = gids[i];
-
-    if (gid >= 1000 && gid < 2000) {
-      return true;
-    }
-  }
-  return false;
-}
-
-static bool EnableTcg(JNIEnv* env, jintArray javaGids) {
+static bool EnableTcg(JNIEnv* env) {
   char propBuf[PROPERTY_VALUE_MAX];
-  property_get("tcg.mode", propBuf, "global");
+  property_get("persist.tcg.mode", propBuf, "global");
 
   if (strcmp(propBuf, "global") == 0) {
     return true;
-  }
-
-  if (strcmp(propBuf, "system") == 0) {
-    return HasSystemGid(env, javaGids);
   }
 
   if (strcmp(propBuf, "disabled") == 0) {
@@ -623,7 +600,7 @@ static pid_t ForkAndSpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArra
 
     SetRLimits(env, javaRlimits);
 
-    if (!is_system_server && EnableTcg(env, javaGids)) {
+    if (!is_system_server && EnableTcg(env)) {
       PreloadTcg();
     }
 
